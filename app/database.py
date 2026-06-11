@@ -69,15 +69,19 @@ def save_email(email):
     conn.close()
 
 
-def get_all_emails():
+def get_emails_by_date(date_text):
     conn = sqlite3.connect(DB_NAME)
     cursor = conn.cursor()
+
+    start_time = f"{date_text} 00:00:00"
+    end_time = f"{date_text} 23:59:59"
 
     cursor.execute("""
         SELECT id, sender, subject, date, snippet, received_at
         FROM emails
+        WHERE received_at >= ? AND received_at <= ?
         ORDER BY received_at DESC
-    """)
+    """, (start_time, end_time))
 
     rows = cursor.fetchall()
     conn.close()
@@ -165,3 +169,32 @@ def has_emails():
     conn.close()
 
     return count > 0
+
+def get_all_emails():
+    conn = sqlite3.connect(DB_NAME)
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT id, sender, subject, date, snippet, received_at
+        FROM emails
+        ORDER BY received_at DESC
+    """)
+
+    rows = cursor.fetchall()
+    conn.close()
+
+    emails = []
+
+    for row in rows:
+        emails.append(
+            Email(
+                id=row[0],
+                sender=row[1],
+                subject=row[2],
+                date=row[3],
+                snippet=row[4],
+                received_at=row[5]
+            )
+        )
+
+    return emails

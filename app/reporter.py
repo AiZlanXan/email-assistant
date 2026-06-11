@@ -52,15 +52,15 @@ def generate_report(categories):
 
     year = now.strftime("%Y")
     month = now.strftime("%m")
-    filename_time = now.strftime("%Y-%m-%d_%H-%M-%S")
+    date_name = now.strftime("%Y-%m-%d")
 
     folder_path = os.path.join("reports", year, month)
     os.makedirs(folder_path, exist_ok=True)
 
-    filename = f"{filename_time}.txt"
+    filename = f"{date_name}.md"
     file_path = os.path.join(folder_path, filename)
 
     with open(file_path, "w", encoding="utf-8") as file:
         file.write(report_text)
 
-    print(f"\n报告已保存：{file_path}")
+    print(f"\n日报已更新：{file_path}")
