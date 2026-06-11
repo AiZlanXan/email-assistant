@@ -19,6 +19,20 @@ def init_db():
         )
     """)
 
+    add_column_if_not_exists(
+        cursor,
+        "emails",
+        "category",
+        "TEXT DEFAULT '未分类'"
+    )
+
+    add_column_if_not_exists(
+        cursor,
+        "emails",
+        "importance",
+        "INTEGER DEFAULT 0"
+    )
+
     conn.commit()
     conn.close()
 
@@ -93,3 +107,17 @@ def update_email_classification(email_id, category, importance):
 
     conn.commit()
     conn.close()
+
+def add_column_if_not_exists(cursor, table_name, column_name, column_definition):
+    cursor.execute(f"PRAGMA table_info({table_name})")
+    columns = cursor.fetchall()
+
+    existing_columns = []
+
+    for column in columns:
+        existing_columns.append(column[1])
+
+    if column_name not in existing_columns:
+        cursor.execute(
+            f"ALTER TABLE {table_name} ADD COLUMN {column_name} {column_definition}"
+        )
