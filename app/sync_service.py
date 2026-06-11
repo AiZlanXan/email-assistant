@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from app.report_engine import update_current_reports
 from app.gmail_client import get_recent_email_details, get_all_email_details
 from app.database import (
     init_db,
@@ -50,7 +51,7 @@ def full_sync(max_results=500):
     today_emails = get_emails_by_date(today)
     today_categories = build_categories(today_emails)
 
-    generate_report(today_categories)
+    update_current_reports()
 
     print("全量同步完成")
 
@@ -67,6 +68,6 @@ def sync_emails(max_results=20):
     today_emails = get_emails_by_date(today)
     today_categories = build_categories(today_emails)
 
-    generate_report(today_categories)
+    update_current_reports()
 
     print("增量同步完成")

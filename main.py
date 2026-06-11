@@ -1,16 +1,8 @@
 import schedule
 import time
-from datetime import datetime
 
 from app.sync_service import sync_emails, full_sync
-from app.database import init_db, has_emails, get_emails_by_month
-from app.monthly_reporter import generate_monthly_summary
-
-
-def generate_current_month_summary():
-    now = datetime.now()
-    emails = get_emails_by_month(now.year, now.month)
-    generate_monthly_summary(emails, now.year, now.month)
+from app.database import init_db, has_emails
 
 
 def main():
@@ -21,16 +13,13 @@ def main():
         sync_emails(max_results=20)
     else:
         print("数据库为空，第一次启动，执行全量同步...")
-        full_sync(max_results=500)
-
-    generate_current_month_summary()
+        full_sync(max_results=3000)
 
     schedule.every(10).minutes.do(sync_emails, max_results=20)
-    schedule.every().day.at("23:59").do(generate_current_month_summary)
 
     print("Email Assistant 正在后台运行...")
     print("每 10 分钟自动同步一次。")
-    print("每天 23:59 自动生成月度总结。")
+    print("每次同步后会自动更新日报、月报、半年报和年报。")
     print("按 Ctrl + C 停止程序。")
 
     while True:

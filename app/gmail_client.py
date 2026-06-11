@@ -85,7 +85,7 @@ def get_recent_email_details(max_results=5):
 
     return emails
 
-def get_all_email_details(max_results=500):
+def get_all_email_details(max_results=3000):
     service = get_service()
 
     emails = []

@@ -218,3 +218,54 @@ def generate_all_reports():
         generate_yearly_report(year, items)
 
     print("所有历史报告生成完成。")
+
+
+def update_current_reports():
+    emails = get_all_emails()
+
+    now = datetime.now()
+    today_key = now.strftime("%Y-%m-%d")
+    month_key = now.strftime("%Y-%m")
+    year_key = now.strftime("%Y")
+
+    today_emails = []
+    month_emails = []
+    year_emails = []
+    half_year_emails = []
+
+    current_month = now.month
+
+    if current_month <= 6:
+        half_name = "H1"
+        half_months = [1, 2, 3, 4, 5, 6]
+    else:
+        half_name = "H2"
+        half_months = [7, 8, 9, 10, 11, 12]
+
+    for email in emails:
+        if not email.received_at:
+            continue
+
+        email_date = email.received_at[:10]
+        email_month = email.received_at[:7]
+        email_year = email.received_at[:4]
+        email_month_number = int(email.received_at[5:7])
+
+        if email_date == today_key:
+            today_emails.append(email)
+
+        if email_month == month_key:
+            month_emails.append(email)
+
+        if email_year == year_key:
+            year_emails.append(email)
+
+        if email_year == year_key and email_month_number in half_months:
+            half_year_emails.append(email)
+
+    generate_daily_report(today_key, today_emails)
+    generate_monthly_report(month_key, month_emails)
+    generate_half_year_report(year_key, half_name, half_year_emails)
+    generate_yearly_report(year_key, year_emails)
+
+    print("当前日报、月报、半年报、年报已更新。")
