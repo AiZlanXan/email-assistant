@@ -1,0 +1,17 @@
+# Google OAuth
+credentials.json
+token.json
+
+# Python
+__pycache__/
+*.pyc
+
+# Virtual Environment
+venv/
+
+# IDE
+.vscode/
+.idea/
+
+# Database
+*.db
