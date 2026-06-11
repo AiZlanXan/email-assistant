@@ -1,3 +1,4 @@
+import os
 from datetime import datetime
 
 
@@ -9,8 +10,8 @@ def generate_report(categories):
     lines.append("=" * 50)
 
     important_categories = ["学校", "财务", "安全"]
-    important_count = 0
 
+    important_count = 0
     for category in important_categories:
         important_count += len(categories.get(category, []))
 
@@ -47,10 +48,19 @@ def generate_report(categories):
 
     print(report_text)
 
-    now = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-    filename = f"report_{now}.txt"
+    now = datetime.now()
 
-    with open(filename, "w", encoding="utf-8") as file:
+    year = now.strftime("%Y")
+    month = now.strftime("%m")
+    filename_time = now.strftime("%Y-%m-%d_%H-%M-%S")
+
+    folder_path = os.path.join("reports", year, month)
+    os.makedirs(folder_path, exist_ok=True)
+
+    filename = f"{filename_time}.txt"
+    file_path = os.path.join(folder_path, filename)
+
+    with open(file_path, "w", encoding="utf-8") as file:
         file.write(report_text)
 
-    print(f"\n报告已保存：{filename}")
+    print(f"\n报告已保存：{file_path}")
