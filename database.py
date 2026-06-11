@@ -48,9 +48,15 @@ def get_all_emails():
     cursor = conn.cursor()
 
     cursor.execute("""
-        SELECT id, sender, subject, date, snippet
-        FROM emails
-        ORDER BY rowid DESC
+        CREATE TABLE IF NOT EXISTS emails (
+            id TEXT PRIMARY KEY,
+            sender TEXT,
+            subject TEXT,
+            date TEXT,
+            snippet TEXT,
+            category TEXT DEFAULT '未分类',
+            importance INTEGER DEFAULT 0
+        )
     """)
 
     rows = cursor.fetchall()
@@ -70,3 +76,20 @@ def get_all_emails():
         )
 
     return emails
+
+def update_email_classification(email_id, category, importance):
+    conn = sqlite3.connect(DB_NAME)
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        UPDATE emails
+        SET category = ?, importance = ?
+        WHERE id = ?
+    """, (
+        category,
+        importance,
+        email_id
+    ))
+
+    conn.commit()
+    conn.close()

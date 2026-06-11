@@ -1,5 +1,5 @@
 from gmail_client import get_recent_email_details
-from database import init_db, save_email, get_all_emails
+from database import init_db, save_email, get_all_emails, update_email_classification
 from classifier import classify_email
 from reporter import generate_report
 
@@ -17,7 +17,8 @@ def main():
     categories = {}
 
     for email in saved_emails:
-        category = classify_email(email)
+        category, importance = classify_email(email)
+        update_email_classification(email.id, category, importance)
 
         if category not in categories:
             categories[category] = []
