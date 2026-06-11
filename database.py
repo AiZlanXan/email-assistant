@@ -1,5 +1,7 @@
 import sqlite3
 
+from models import Email
+
 DB_NAME = "emails.db"
 
 
@@ -26,7 +28,8 @@ def save_email(email):
     cursor = conn.cursor()
 
     cursor.execute("""
-        INSERT OR IGNORE INTO emails (id, sender, subject, date, snippet)
+        INSERT OR IGNORE INTO emails
+        (id, sender, subject, date, snippet)
         VALUES (?, ?, ?, ?, ?)
     """, (
         email.id,
@@ -38,3 +41,32 @@ def save_email(email):
 
     conn.commit()
     conn.close()
+
+
+def get_all_emails():
+    conn = sqlite3.connect(DB_NAME)
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT id, sender, subject, date, snippet
+        FROM emails
+        ORDER BY rowid DESC
+    """)
+
+    rows = cursor.fetchall()
+    conn.close()
+
+    emails = []
+
+    for row in rows:
+        emails.append(
+            Email(
+                id=row[0],
+                sender=row[1],
+                subject=row[2],
+                date=row[3],
+                snippet=row[4]
+            )
+        )
+
+    return emails
