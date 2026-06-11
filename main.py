@@ -1,30 +1,21 @@
-from app.gmail_client import get_recent_email_details
-from app.database import init_db, save_email, get_all_emails, update_email_classification
-from app.classifier import classify_email
-from app.reporter import generate_report
+import schedule
+import time
+
+from app.sync_service import sync_emails
+
 
 def main():
-    init_db()
+    sync_emails(max_results=10)
 
-    new_emails = get_recent_email_details(max_results=10)
+    schedule.every(10).minutes.do(sync_emails, max_results=10)
 
-    for email in new_emails:
-        save_email(email)
+    print("Email Assistant 正在后台运行...")
+    print("每 10 分钟自动同步一次。")
+    print("按 Ctrl + C 停止程序。")
 
-    saved_emails = get_all_emails()
-
-    categories = {}
-
-    for email in saved_emails:
-        category, importance = classify_email(email)
-        update_email_classification(email.id, category, importance)
-
-        if category not in categories:
-            categories[category] = []
-
-        categories[category].append(email)
-
-    generate_report(categories)
+    while True:
+        schedule.run_pending()
+        time.sleep(1)
 
 
 if __name__ == "__main__":
