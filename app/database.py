@@ -1,6 +1,6 @@
 import sqlite3
 
-from models import Email
+from app.models import Email
 
 DB_NAME = "emails.db"
 

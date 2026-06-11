@@ -1,8 +1,7 @@
-from gmail_client import get_recent_email_details
-from database import init_db, save_email, get_all_emails, update_email_classification
-from classifier import classify_email
-from reporter import generate_report
-
+from app.gmail_client import get_recent_email_details
+from app.database import init_db, save_email, get_all_emails, update_email_classification
+from app.classifier import classify_email
+from app.reporter import generate_report
 
 def main():
     init_db()

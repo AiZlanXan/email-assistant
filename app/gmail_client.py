@@ -6,7 +6,7 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 
 from config import SCOPES
-from models import Email
+from app.models import Email
 
 
 def get_service():

@@ -4,10 +4,13 @@ token.json
 
 # Python
 __pycache__/
-*.pyc
+*.py[cod]
+*$py.class
 
 # Virtual Environment
 venv/
+.env/
+.venv/
 
 # IDE
 .vscode/
@@ -15,3 +18,15 @@ venv/
 
 # Database
 *.db
+
+# Reports
+report_*.txt
+
+# Logs
+*.log
+
+# OS Files
+.DS_Store
+Thumbs.db
+data/
+reports/
