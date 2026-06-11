@@ -28,5 +28,8 @@ report_*.txt
 # OS Files
 .DS_Store
 Thumbs.db
+
+# Personal Files
 data/
 reports/
+logs/

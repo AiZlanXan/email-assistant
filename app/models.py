@@ -8,3 +8,4 @@ class Email:
     subject: str
     date: str
     snippet: str
+    received_at: str = ""
